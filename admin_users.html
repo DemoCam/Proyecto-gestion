@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Yovendo Admin - User Management</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&amp;family=Inter:wght@100..900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "primary-dim": "#485367",
+                        "on-secondary": "#f8f8ff",
+                        "tertiary-fixed-dim": "#d4cdee",
+                        "on-error-container": "#752121",
+                        "on-tertiary-container": "#514d68",
+                        "inverse-surface": "#0b0f10",
+                        "surface-container-low": "#f0f4f7",
+                        "tertiary-fixed": "#e3dbfd",
+                        "tertiary-container": "#e3dbfd",
+                        "on-surface": "#2a3439",
+                        "on-tertiary": "#fcf7ff",
+                        "tertiary": "#605c78",
+                        "error-container": "#fe8983",
+                        "surface-container": "#e8eff3",
+                        "on-tertiary-fixed-variant": "#5b5672",
+                        "secondary": "#526074",
+                        "surface-container-high": "#e1e9ee",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-container-highest": "#d9e4ea",
+                        "outline": "#717c82",
+                        "secondary-fixed": "#d5e3fc",
+                        "secondary-fixed-dim": "#c7d5ed",
+                        "surface-bright": "#f7f9fb",
+                        "on-primary": "#f6f7ff",
+                        "on-secondary-fixed-variant": "#4e5c71",
+                        "inverse-primary": "#dae6fe",
+                        "surface-variant": "#d9e4ea",
+                        "error-dim": "#4e0309",
+                        "error": "#9f403d",
+                        "outline-variant": "#a9b4b9",
+                        "on-background": "#2a3439",
+                        "secondary-dim": "#465468",
+                        "surface": "#f7f9fb",
+                        "on-surface-variant": "#566166",
+                        "on-primary-container": "#475266",
+                        "on-secondary-container": "#455367",
+                        "on-tertiary-fixed": "#3e3a54",
+                        "secondary-container": "#d5e3fc",
+                        "on-secondary-fixed": "#324053",
+                        "primary-fixed-dim": "#cad5ed",
+                        "primary-container": "#d8e3fb",
+                        "on-error": "#fff7f6",
+                        "background": "#f7f9fb",
+                        "on-primary-fixed-variant": "#515c70",
+                        "primary": "#545f73",
+                        "inverse-on-surface": "#9a9d9f",
+                        "surface-dim": "#cfdce3",
+                        "surface-tint": "#545f73",
+                        "tertiary-dim": "#54506b",
+                        "on-primary-fixed": "#354053",
+                        "primary-fixed": "#d8e3fb"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "fontFamily": {
+                        "headline": ["Manrope"],
+                        "body": ["Inter"],
+                        "label": ["Inter"]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        body { font-family: 'Inter', sans-serif; }
+        h1, h2, h3, .brand-font { font-family: 'Manrope', sans-serif; }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background selection:bg-primary-container">
+<!-- Navigation Drawer (Side Nav) -->
+<nav class="fixed left-0 top-0 flex flex-col h-full py-6 px-4 bg-slate-100 dark:bg-slate-950 h-screen w-72 border-r-0 z-50 transition-all duration-300 ease-in-out">
+<div class="flex items-center gap-3 px-4 mb-10">
+<div class="w-10 h-10 bg-primary flex items-center justify-center rounded-lg">
+<span class="material-symbols-outlined text-on-primary" data-icon="security">security</span>
+</div>
+<div>
+<h2 class="font-manrope font-black text-slate-800 dark:text-slate-100 text-lg leading-tight">Yovendo Admin</h2>
+<p class="text-xs font-inter font-medium text-slate-500 uppercase tracking-widest">Enterprise Tier</p>
+</div>
+</div>
+<div class="space-y-1 flex-1">
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300 ease-in-out text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 hover:bg-slate-200/30 dark:hover:bg-slate-800/30 font-inter text-sm font-medium" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+                Dashboard
+            </a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300 ease-in-out bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-50 shadow-sm font-inter text-sm font-medium" href="#">
+<span class="material-symbols-outlined" data-icon="group">group</span>
+                User Management
+            </a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300 ease-in-out text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 hover:bg-slate-200/30 dark:hover:bg-slate-800/30 font-inter text-sm font-medium" href="#">
+<span class="material-symbols-outlined" data-icon="security">security</span>
+                Roles
+            </a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300 ease-in-out text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 hover:bg-slate-200/30 dark:hover:bg-slate-800/30 font-inter text-sm font-medium" href="#">
+<span class="material-symbols-outlined" data-icon="verified_user">verified_user</span>
+                Permissions
+            </a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300 ease-in-out text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 hover:bg-slate-200/30 dark:hover:bg-slate-800/30 font-inter text-sm font-medium" href="#">
+<span class="material-symbols-outlined" data-icon="list_alt">list_alt</span>
+                System Logs
+            </a>
+</div>
+<div class="mt-auto px-4 py-4 bg-slate-200/30 dark:bg-slate-900/50 rounded-2xl flex items-center gap-3">
+<img alt="Yovendo Admin" class="w-10 h-10 rounded-full border-2 border-white shadow-sm" data-alt="close up professional headshot of a mature businessman with a confident look and neutral background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAqGUVdcGm67Gn5xIVtW7aD9V2IsCGP6qYzwuDtp31dcPvDUlW-i29SpSixqPILDLhJlB_0xAx3gCOYrb4f3CWEMHhDUG0rOzqA8wMYsZEW09NVwYYH55gX0aYuCCJ4GOFjklMpuPr8_EHxggfcskwp4GJaLgC1GBnQC_FjqGJkB07eWFmVU48-g3P1D-30e55WMH27nJCGq5zQ8BYwhfuqF7Sly9J1dtIZleW79rgBdFGnrlqZsxfnTwD1vIyZaNDpKglCBaz4L10"/>
+<div class="overflow-hidden">
+<p class="text-sm font-bold text-slate-800 dark:text-slate-100 truncate">Yovendo Admin</p>
+<p class="text-[10px] text-slate-500 dark:text-slate-400 font-mono">v2.4.0</p>
+</div>
+</div>
+</nav>
+<!-- Main Content Area -->
+<main class="ml-72 min-h-screen">
+<!-- Top App Bar -->
+<header class="flex justify-between items-center px-8 py-4 w-full bg-slate-50/80 dark:bg-slate-900/80 backdrop-blur-xl sticky top-0 z-40">
+<div class="flex items-center gap-4">
+<button class="p-2 rounded-full hover:bg-slate-200/50 dark:hover:bg-slate-700/50 transition-colors text-slate-600 dark:text-slate-400">
+<span class="material-symbols-outlined" data-icon="menu">menu</span>
+</button>
+<h1 class="font-manrope tracking-tight font-bold text-slate-800 dark:text-slate-100 text-2xl">User Management</h1>
+</div>
+<div class="flex items-center gap-6">
+<button class="flex items-center gap-2 bg-gradient-to-r from-primary to-primary-dim text-on-primary px-5 py-2.5 rounded-lg font-medium text-sm transition-all hover:brightness-110 active:scale-95 shadow-lg shadow-primary/10">
+<span class="material-symbols-outlined text-lg" data-icon="add">add</span>
+                    Create User
+                </button>
+<div class="w-10 h-10 rounded-full bg-slate-200 dark:bg-slate-700 overflow-hidden ring-2 ring-white dark:ring-slate-800">
+<img alt="Admin Profile" class="w-full h-full object-cover" data-alt="Minimalist abstract circular profile icon with soft blue and gray tones" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCgKNAwzu3HpZPeN-idj0IioWN1tfyc1eECPFxlwjPsvJkU4r_P3yLKwBJ_iJz6gu-IhWU20IxD98tYXdHPxDJuKRDRa9kPpWBzvRyhjzBf734lcXxU_Fr-zQB4h7bX6yes-GiF6EYOV-IaGixigUB_5Qp20_5gbTlt8yRCcS4ywyB__n2KMmc1St-N3f8XqaNH_VERtpexiE4lR3YCIcXK-pEnHUE8uKCWOsjrk51jzhn4XgaYsnVvW2B0VJW_6fagyXiL_l12t0o"/>
+</div>
+</div>
+</header>
+<!-- Search and Filter Bar -->
+<section class="px-8 pt-8 pb-4">
+<div class="flex flex-col md:flex-row gap-4 items-center">
+<div class="relative flex-1 group">
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-primary transition-colors" data-icon="search">search</span>
+<input class="w-full pl-12 pr-4 py-3 bg-surface-container-lowest border-none rounded-xl text-sm focus:ring-2 focus:ring-primary/20 transition-all placeholder:text-slate-400 shadow-sm" placeholder="Search by name, email, or role..." type="text"/>
+</div>
+<button class="flex items-center gap-2 px-5 py-3 bg-surface-container-lowest text-slate-600 font-medium text-sm rounded-xl hover:bg-slate-100 transition-all border border-slate-200/50 shadow-sm">
+<span class="material-symbols-outlined" data-icon="filter_list">filter_list</span>
+                    Filters
+                </button>
+<button class="flex items-center gap-2 px-5 py-3 bg-surface-container-lowest text-slate-600 font-medium text-sm rounded-xl hover:bg-slate-100 transition-all border border-slate-200/50 shadow-sm">
+<span class="material-symbols-outlined" data-icon="download">download</span>
+                    Export
+                </button>
+</div>
+</section>
+<!-- User List / Content Canvas -->
+<section class="px-8 pb-12">
+<!-- Bento Grid Stats (Optional Context) -->
+<div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+<div class="p-6 bg-surface-container-lowest rounded-2xl shadow-sm border border-slate-200/10">
+<p class="text-xs font-label uppercase tracking-widest text-on-surface-variant mb-2">Total Users</p>
+<p class="text-3xl font-headline font-extrabold text-primary">1,284</p>
+<div class="mt-4 flex items-center text-xs text-emerald-600 font-medium">
+<span class="material-symbols-outlined text-sm mr-1" data-icon="trending_up">trending_up</span>
+                        12% increase
+                    </div>
+</div>
+<div class="p-6 bg-surface-container-lowest rounded-2xl shadow-sm border border-slate-200/10">
+<p class="text-xs font-label uppercase tracking-widest text-on-surface-variant mb-2">Active Now</p>
+<p class="text-3xl font-headline font-extrabold text-primary">342</p>
+<div class="mt-4 flex items-center text-xs text-slate-500 font-medium">
+<span class="w-2 h-2 rounded-full bg-emerald-500 mr-2 animate-pulse"></span>
+                        Real-time activity
+                    </div>
+</div>
+<div class="p-6 bg-surface-container-lowest rounded-2xl shadow-sm border border-slate-200/10">
+<p class="text-xs font-label uppercase tracking-widest text-on-surface-variant mb-2">Admins</p>
+<p class="text-3xl font-headline font-extrabold text-primary">18</p>
+<div class="mt-4 flex items-center text-xs text-slate-500 font-medium">
+                        System access tier
+                    </div>
+</div>
+<div class="p-6 bg-surface-container-lowest rounded-2xl shadow-sm border border-slate-200/10">
+<p class="text-xs font-label uppercase tracking-widest text-on-surface-variant mb-2">Avg Session</p>
+<p class="text-3xl font-headline font-extrabold text-primary">42m</p>
+<div class="mt-4 flex items-center text-xs text-slate-500 font-medium">
+                        Across all roles
+                    </div>
+</div>
+</div>
+<!-- Table Header (Desktop) -->
+<div class="hidden md:grid grid-cols-12 px-6 py-4 mb-2 text-xs font-label uppercase tracking-widest text-on-surface-variant/70 font-semibold">
+<div class="col-span-4">User Details</div>
+<div class="col-span-3">Email Address</div>
+<div class="col-span-2">Role</div>
+<div class="col-span-2">Status</div>
+<div class="col-span-1 text-right">Actions</div>
+</div>
+<!-- User Cards / Rows -->
+<div class="space-y-3">
+<!-- User Item 1 -->
+<div class="grid grid-cols-1 md:grid-cols-12 items-center px-6 py-4 bg-surface-container-lowest rounded-2xl shadow-sm border border-slate-200/20 hover:border-primary/20 transition-all group">
+<div class="col-span-4 flex items-center gap-4">
+<img alt="Alexander Grant" class="w-10 h-10 rounded-full" data-alt="professional portrait of a man with light beard and dark hair wearing a crisp white shirt against a soft gray background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDAPXl0Uyfi6byraNVrSfrS0_yEBSSLfdyMlp9ikIsx9qikVOeCt4gG_zOfvUXyP458LphjyIiKB6yBecr-ZDZ3ey4220uuKjg1QhdL1hZ1Sv2H3Z8P2DZZ65Buvz5cgpdHoz9ySBwBk1qyGb4D01z_HM8GnAVXAmnfaUJ8bxcJfyn33R0YuYASKKuNTaxePIjGvZK-jmG2c9sj9YRbUIf_SKfPAB2klwLsw5J-izulJkYLvIRQuWmwnQEbRB-joAYnns69pY13lu8"/>
+<div>
+<p class="text-sm font-bold text-slate-800">Alexander Grant</p>
+<p class="text-xs text-slate-500">Joined 12 Oct 2023</p>
+</div>
+</div>
+<div class="col-span-3 text-sm text-slate-600 mt-2 md:mt-0">
+                        alex.grant@yovendo.com
+                    </div>
+<div class="col-span-2 mt-2 md:mt-0">
+<span class="px-3 py-1 bg-primary-container text-on-primary-container text-[10px] font-bold uppercase tracking-wider rounded-full">Admin</span>
+</div>
+<div class="col-span-2 mt-2 md:mt-0">
+<span class="flex items-center gap-1.5 text-xs text-emerald-600 font-semibold">
+<span class="w-1.5 h-1.5 bg-emerald-500 rounded-full"></span>
+                            Active
+                        </span>
+</div>
+<div class="col-span-1 text-right mt-2 md:mt-0">
+<button class="p-2 rounded-lg hover:bg-slate-100 transition-colors text-slate-400 hover:text-slate-600">
+<span class="material-symbols-outlined" data-icon="more_vert">more_vert</span>
+</button>
+</div>
+</div>
+<!-- User Item 2 -->
+<div class="grid grid-cols-1 md:grid-cols-12 items-center px-6 py-4 bg-surface-container-lowest rounded-2xl shadow-sm border border-slate-200/20 hover:border-primary/20 transition-all group">
+<div class="col-span-4 flex items-center gap-4">
+<img alt="Elena Rodriguez" class="w-10 h-10 rounded-full" data-alt="Portrait of a professional woman with glasses and dark hair smiling warmly, soft office lighting in the background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBh3A9BvL-LtYgQcNFrlTBDLqgjod6hwSp3YOflt3dmQFDV8-6n1m-TypBPY9A_i5X0X-YWKzO4HHEcDQV3mkY1vFBGAy9hdn2ZlYrvZeDXuG_bRIIjL_cPnMsVyBecxGbQGDv2tuvEE4i1P2eH9pm_84dYw_a__DWts_CclZ-xUTikjRvljRqfuQz4FPhgAqgKU1wD4Xo1k5oAxQsOvAikvMOgp7-8gowqiquj0dP9PbytGL9IrxSWvDmjoTolrIwVf71v6f1SAyM"/>
+<div>
+<p class="text-sm font-bold text-slate-800">Elena Rodriguez</p>
+<p class="text-xs text-slate-500">Joined 05 Nov 2023</p>
+</div>
+</div>
+<div class="col-span-3 text-sm text-slate-600 mt-2 md:mt-0">
+                        e.rodriguez@yovendo.com
+                    </div>
+<div class="col-span-2 mt-2 md:mt-0">
+<span class="px-3 py-1 bg-slate-100 text-slate-600 text-[10px] font-bold uppercase tracking-wider rounded-full">Editor</span>
+</div>
+<div class="col-span-2 mt-2 md:mt-0">
+<span class="flex items-center gap-1.5 text-xs text-emerald-600 font-semibold">
+<span class="w-1.5 h-1.5 bg-emerald-500 rounded-full"></span>
+                            Active
+                        </span>
+</div>
+<div class="col-span-1 text-right mt-2 md:mt-0">
+<button class="p-2 rounded-lg hover:bg-slate-100 transition-colors text-slate-400 hover:text-slate-600">
+<span class="material-symbols-outlined" data-icon="more_vert">more_vert</span>
+</button>
+</div>
+</div>
+<!-- User Item 3 -->
+<div class="grid grid-cols-1 md:grid-cols-12 items-center px-6 py-4 bg-surface-container-lowest rounded-2xl shadow-sm border border-slate-200/20 hover:border-primary/20 transition-all group">
+<div class="col-span-4 flex items-center gap-4">
+<img alt="Marcus Chen" class="w-10 h-10 rounded-full" data-alt="Headshot of a creative professional man with stylish haircut and glasses in a bright architectural studio setting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBuG7p-pFIYDTj7aLxilxA-xVtlnntQ57RY69FZKP7PCiuaRZY013s3jGRap9l5z2X66vhv_zqfVWvYUuxyrdy6KSS1VQJTFIWtqrjUEzjLH0KL246C_yU_C54FfXxPZmyGkzPR79WdRfWQliOoNpsRMYIbXBsJsB-7ufnp0QDVVvO8JktZ9yjxVeVwoGtUACpTtwYMlrZugyPLzUjXER0Nj4dzsfDSXQRpAEGUFLOsFZ1NDrUUwaulhUTKb7-id3K34AdhesUt7gQ"/>
+<div>
+<p class="text-sm font-bold text-slate-800">Marcus Chen</p>
+<p class="text-xs text-slate-500">Joined 28 Dec 2023</p>
+</div>
+</div>
+<div class="col-span-3 text-sm text-slate-600 mt-2 md:mt-0">
+                        marcus.c@yovendo.com
+                    </div>
+<div class="col-span-2 mt-2 md:mt-0">
+<span class="px-3 py-1 bg-slate-100 text-slate-600 text-[10px] font-bold uppercase tracking-wider rounded-full">Viewer</span>
+</div>
+<div class="col-span-2 mt-2 md:mt-0">
+<span class="flex items-center gap-1.5 text-xs text-slate-400 font-semibold">
+<span class="w-1.5 h-1.5 bg-slate-300 rounded-full"></span>
+                            Inactive
+                        </span>
+</div>
+<div class="col-span-1 text-right mt-2 md:mt-0">
+<button class="p-2 rounded-lg hover:bg-slate-100 transition-colors text-slate-400 hover:text-slate-600">
+<span class="material-symbols-outlined" data-icon="more_vert">more_vert</span>
+</button>
+</div>
+</div>
+<!-- User Item 4 -->
+<div class="grid grid-cols-1 md:grid-cols-12 items-center px-6 py-4 bg-surface-container-lowest rounded-2xl shadow-sm border border-slate-200/20 hover:border-primary/20 transition-all group">
+<div class="col-span-4 flex items-center gap-4">
+<img alt="Sarah Jenkins" class="w-10 h-10 rounded-full" data-alt="Portrait of a young woman with a professional smile, wearing a blazer, shot in a minimalist studio with soft natural light" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCp7oie4liZqhu06gG6QH0ANfalttszl8Dzv-UNHrc42QWhqU_IrwTTO7uFwt01o_W-WTH7WRkxhynTe5dmAhJAW5aNABNWciId-iccRIM2ZXocIaKJ5koCs9UeAfY3LzC_rL0FY8Ps-EQGZcmVi5pFvyZlOnDDEzC60WsP4UOCzze64_7sEMTWJa4d2znb3C4tsm5qv6Pc6pv8IkOFjFBon_PW8L4RKHpA0pW-YviOiompc63akQdnoLQL9IUk7FuBH84dQ_IMHN0"/>
+<div>
+<p class="text-sm font-bold text-slate-800">Sarah Jenkins</p>
+<p class="text-xs text-slate-500">Joined 15 Jan 2024</p>
+</div>
+</div>
+<div class="col-span-3 text-sm text-slate-600 mt-2 md:mt-0">
+                        s.jenkins@yovendo.com
+                    </div>
+<div class="col-span-2 mt-2 md:mt-0">
+<span class="px-3 py-1 bg-slate-100 text-slate-600 text-[10px] font-bold uppercase tracking-wider rounded-full">Editor</span>
+</div>
+<div class="col-span-2 mt-2 md:mt-0">
+<span class="flex items-center gap-1.5 text-xs text-emerald-600 font-semibold">
+<span class="w-1.5 h-1.5 bg-emerald-500 rounded-full"></span>
+                            Active
+                        </span>
+</div>
+<div class="col-span-1 text-right mt-2 md:mt-0">
+<button class="p-2 rounded-lg hover:bg-slate-100 transition-colors text-slate-400 hover:text-slate-600">
+<span class="material-symbols-outlined" data-icon="more_vert">more_vert</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Pagination -->
+<div class="mt-8 flex justify-between items-center bg-surface-container-low p-4 rounded-2xl">
+<p class="text-xs text-slate-500 font-medium">Showing 1 to 4 of 1,284 users</p>
+<div class="flex gap-2">
+<button class="w-10 h-10 flex items-center justify-center rounded-xl bg-surface-container-lowest text-slate-400 border border-slate-200/50 hover:text-primary transition-all">
+<span class="material-symbols-outlined" data-icon="chevron_left">chevron_left</span>
+</button>
+<button class="w-10 h-10 flex items-center justify-center rounded-xl bg-primary text-on-primary shadow-sm font-bold text-sm">1</button>
+<button class="w-10 h-10 flex items-center justify-center rounded-xl bg-surface-container-lowest text-slate-600 border border-slate-200/50 hover:bg-slate-100 transition-all font-medium text-sm">2</button>
+<button class="w-10 h-10 flex items-center justify-center rounded-xl bg-surface-container-lowest text-slate-600 border border-slate-200/50 hover:bg-slate-100 transition-all font-medium text-sm">3</button>
+<button class="w-10 h-10 flex items-center justify-center rounded-xl bg-surface-container-lowest text-slate-400 border border-slate-200/50 hover:text-primary transition-all">
+<span class="material-symbols-outlined" data-icon="chevron_right">chevron_right</span>
+</button>
+</div>
+</div>
+</section>
+<!-- Intelligence Rail (Right Side) -->
+<aside class="fixed right-0 top-0 h-full w-80 bg-surface-container-high border-l-0 py-20 px-6 hidden xl:block">
+<h3 class="font-manrope font-bold text-slate-800 text-lg mb-6">Identity Insights</h3>
+<div class="space-y-6">
+<div class="p-5 bg-surface-container-lowest rounded-2xl shadow-sm">
+<div class="flex items-center gap-3 mb-4">
+<span class="material-symbols-outlined text-tertiary" data-icon="security_update_good">security_update_good</span>
+<p class="text-sm font-bold text-slate-700">Access Health</p>
+</div>
+<div class="h-2 w-full bg-slate-100 rounded-full overflow-hidden">
+<div class="h-full bg-tertiary w-[94%]"></div>
+</div>
+<p class="text-[11px] text-slate-500 mt-2 font-medium">94% of users have MFA enabled</p>
+</div>
+<div class="p-5 bg-surface-container-lowest rounded-2xl shadow-sm">
+<p class="text-[10px] font-label uppercase tracking-widest text-on-surface-variant mb-4">Recent Activity</p>
+<div class="space-y-4">
+<div class="flex gap-3">
+<div class="w-1.5 h-1.5 rounded-full bg-primary mt-1.5 shrink-0"></div>
+<div>
+<p class="text-xs font-bold text-slate-700">Role change: Elena R.</p>
+<p class="text-[10px] text-slate-400">2 minutes ago</p>
+</div>
+</div>
+<div class="flex gap-3">
+<div class="w-1.5 h-1.5 rounded-full bg-tertiary mt-1.5 shrink-0"></div>
+<div>
+<p class="text-xs font-bold text-slate-700">Password reset: Marcus C.</p>
+<p class="text-[10px] text-slate-400">14 minutes ago</p>
+</div>
+</div>
+<div class="flex gap-3">
+<div class="w-1.5 h-1.5 rounded-full bg-error mt-1.5 shrink-0"></div>
+<div>
+<p class="text-xs font-bold text-slate-700">Failed login attempt</p>
+<p class="text-[10px] text-slate-400">1 hour ago</p>
+</div>
+</div>
+</div>
+</div>
+<div class="rounded-2xl overflow-hidden relative group aspect-video">
+<img alt="Global Access Map" class="w-full h-full object-cover grayscale opacity-50 group-hover:opacity-80 transition-opacity" data-alt="Minimalist data visualization map showing global nodes connected by subtle glowing lines on a dark blue background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBIp-HC2MGP-5Fz_y8XQqwEbFQhS6cYX68_PPup_5tapK8oiZcEAIGv_SWhMep-KRtBBCXU9CcNu04UzmDoNkUHECDV79-CFmTvxhsc65Mxp243yxyqA1XOPM3zY7YQsroCQPk-uLRCglHX35RC8KgLtuL4_BVFF79VKHK8leFibeqhtaIuuP-OtsnbU9cE6_cf-tOhzOAV5NRoJ1l86NwS_vyK_Uq4TXf64hrfZ7sMWCb1LfB4hWo7MSJkTV-RE7iuhf9-EXtO3w8"/>
+<div class="absolute inset-0 bg-gradient-to-t from-primary/80 to-transparent flex items-end p-4">
+<p class="text-white text-[10px] font-bold uppercase tracking-wider">Live System Nodes</p>
+</div>
+</div>
+</div>
+</aside>
+</main>
+<!-- Floating Action Button (FAB) - Mobile Only -->
+<button class="md:hidden fixed bottom-6 right-6 w-14 h-14 bg-primary text-on-primary rounded-full shadow-2xl flex items-center justify-center z-50">
+<span class="material-symbols-outlined" data-icon="add">add</span>
+</button>
+</body></html>

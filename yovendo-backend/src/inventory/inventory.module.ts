@@ -1,0 +1,20 @@
+import { Module } from '@nestjs/common';
+import { MongooseModule } from '@nestjs/mongoose';
+import { InventoryController } from './inventory.controller';
+import { InventoryService } from './inventory.service';
+import { InventoryCategory, InventoryCategorySchema } from './schemas/inventory-category.schema';
+import { InventoryItem, InventoryItemSchema } from './schemas/inventory-item.schema';
+import { InventoryMovement, InventoryMovementSchema } from './schemas/inventory-movement.schema';
+
+@Module({
+  imports: [
+    MongooseModule.forFeature([
+      { name: InventoryCategory.name, schema: InventoryCategorySchema },
+      { name: InventoryItem.name, schema: InventoryItemSchema },
+      { name: InventoryMovement.name, schema: InventoryMovementSchema }
+    ])
+  ],
+  controllers: [InventoryController],
+  providers: [InventoryService],
+})
+export class InventoryModule {}
