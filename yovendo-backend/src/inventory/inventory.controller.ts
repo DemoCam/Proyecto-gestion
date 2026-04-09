@@ -3,6 +3,9 @@ import { InventoryService } from './inventory.service';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { RolesGuard } from '../auth/roles.guard';
 import { SetMetadata } from '@nestjs/common';
+import { CreateItemDto } from './dto/create-item.dto';
+import { UpdateItemDto } from './dto/update-item.dto';
+import { RecordMovementDto } from './dto/record-movement.dto';
 
 const Roles = (...roles: string[]) => SetMetadata('roles', roles);
 
@@ -22,12 +25,12 @@ export class InventoryController {
   async getItems() { return this.inventoryService.getItems(); }
 
   @Post('items')
-  async createItem(@Body() dto: any, @Request() req) { 
-    return this.inventoryService.createItem(dto, req.user.userId); 
+  async createItem(@Body() dto: CreateItemDto, @Request() req) {
+    return this.inventoryService.createItem(dto, req.user.userId);
   }
 
   @Put('items/:id')
-  async updateItem(@Param('id') id: string, @Body() dto: any, @Request() req) {
+  async updateItem(@Param('id') id: string, @Body() dto: UpdateItemDto, @Request() req) {
     return this.inventoryService.updateItem(id, dto, req.user.userId);
   }
 
@@ -37,7 +40,7 @@ export class InventoryController {
   }
 
   @Post('movements')
-  async recordMovement(@Body() dto: any, @Request() req) {
+  async recordMovement(@Body() dto: RecordMovementDto, @Request() req) {
     return this.inventoryService.recordMovement(dto.itemId, dto, req.user.userId);
   }
 }

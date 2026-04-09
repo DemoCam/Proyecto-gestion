@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 
-const DB_URI = 'mongodb+srv://Proyecto_Gestion:si2Tef1oPqQmktog@cluster0.uux2ndk.mongodb.net/yovendo_db?appName=Cluster0';
+const DB_URI = process.env.MONGO_URI;
 
 async function seed() {
   await mongoose.connect(DB_URI);

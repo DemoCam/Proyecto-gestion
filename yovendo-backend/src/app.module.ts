@@ -11,7 +11,7 @@ import { InventoryModule } from './inventory/inventory.module';
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
-    MongooseModule.forRoot(process.env.MONGO_URI || 'mongodb+srv://Proyecto_Gestion:si2Tef1oPqQmktog@cluster0.uux2ndk.mongodb.net/yovendo_db?appName=Cluster0'),
+    MongooseModule.forRoot(process.env.MONGO_URI ?? ''),
     RolesModule,
     UsersModule,
     AuthModule,

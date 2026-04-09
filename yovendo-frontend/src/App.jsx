@@ -5,8 +5,12 @@ import Layout from './components/Layout';
 import AdminUsers from './pages/admin/AdminUsers';
 import InventoryDashboard from './pages/inventory/InventoryDashboard';
 import ItemMovements from './pages/inventory/ItemMovements';
+import NoModule from './pages/NoModule';
+import { useAuth } from './context/AuthContext';
 
 function App() {
+  const { user } = useAuth();
+
   return (
     <Routes>
       <Route path="/login" element={<Login />} />
@@ -22,8 +26,16 @@ function App() {
         <Route path="/inventory/movements/:id" element={<ItemMovements />} />
       </Route>
 
-      {/* RUTA POR DEFECTO */}
-      <Route path="/" element={<Navigate to="/login" replace />} />
+      {/* RUTA DE SOPORTE / NO IMPLEMENTADO */}
+      <Route path="/no-module" element={<NoModule />} />
+
+      {/* REDIRECCIÓN INICIAL BASADA EN ROL */}
+      <Route path="/" element={
+        !user ? <Navigate to="/login" replace /> :
+        user.role === 'ADMIN' ? <Navigate to="/admin/users" replace /> :
+        user.role === 'SUPERVISOR' ? <Navigate to="/inventory" replace /> :
+        <Navigate to="/no-module" replace />
+      } />
     </Routes>
   );
 }

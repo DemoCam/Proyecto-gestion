@@ -23,7 +23,7 @@ export default function GlobalSidebar() {
         <div className="space-y-1 flex-1 animate-slide-up delay-200">
           <p className="px-4 text-[10px] font-bold uppercase tracking-widest text-outline mb-3 mt-4">Navegación</p>
           
-          {(user.role === 'SUPERVISOR' || user.role === 'ADMIN') && (
+          {user.role === 'SUPERVISOR' && (
             <Link to="/inventory" className={`flex items-center gap-3 px-4 py-3.5 rounded-xl transition-all duration-300 ease-in-out font-inter text-sm font-bold ${location.pathname.startsWith('/inventory') ? 'bg-primary text-on-primary shadow-md shadow-primary/20 scale-[1.02]' : 'text-on-surface-variant hover:text-primary hover:bg-surface-container-high'}`}>
               <span className="material-symbols-outlined" style={{ fontVariationSettings: location.pathname.startsWith('/inventory') ? "'FILL' 1" : "'FILL' 0" }}>inventory_2</span>
               Inventario Central

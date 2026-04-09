@@ -28,7 +28,7 @@ export class InventoryMovement {
   @Prop({ required: true })
   newStock: number;
 
-  @Prop({ required: true })
+  @Prop({ required: false, default: '' })
   reason: string;
 
   @Prop()

@@ -9,7 +9,7 @@ export class UsersService {
   constructor(@InjectModel(User.name) private userModel: Model<UserDocument>) {}
 
   async create(createDto: any): Promise<User> {
-    const existing = await this.userModel.findOne({ email: createDto.email });
+    const existing = await this.userModel.findOne({ correo: createDto.correo });
     if (existing) throw new BadRequestException('Email already in use');
     
     const salt = await bcrypt.genSalt(10);
@@ -27,11 +27,19 @@ export class UsersService {
   }
 
   async findByEmail(email: string): Promise<UserDocument | null> {
-    return this.userModel.findOne({ email }).populate('roleId').exec();
+    return this.userModel.findOne({ correo: email }).populate('roleId').exec();
   }
 
   async update(id: string, updateDto: any): Promise<User | null> {
-    return this.userModel.findByIdAndUpdate(id, updateDto, { new: true }).exec();
+    const updateData = { ...updateDto };
+
+    if (updateData.password) {
+      const salt = await bcrypt.genSalt(10);
+      updateData.passwordHash = await bcrypt.hash(updateData.password, salt);
+      delete updateData.password;
+    }
+
+    return this.userModel.findByIdAndUpdate(id, updateData, { new: true }).exec();
   }
 
   async setStatus(id: string, status: UserStatus): Promise<User | null> {

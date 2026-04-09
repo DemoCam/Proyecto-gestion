@@ -9,7 +9,8 @@ export default function InventoryDashboard() {
   const [categories, setCategories] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [showCategoryModal, setShowCategoryModal] = useState(false);
-  const [form, setForm] = useState({ code: '', name: '', categoryId: '', unit: 'UND', costPrice: 0, salePrice: 0 });
+  const [editingId, setEditingId] = useState(null);
+  const [form, setForm] = useState({ code: '', name: '', categoryId: '', unit: 'UND', currentStock: 0, costPrice: 0, salePrice: 0 });
   const [catForm, setCatForm] = useState({ name: '', description: '' });
 
   const fetchData = async () => {
@@ -24,12 +25,31 @@ export default function InventoryDashboard() {
 
   useEffect(() => { fetchData() }, []);
 
+  const handleEdit = (item) => {
+    setEditingId(item._id);
+    setForm({
+      code: item.code,
+      name: item.name,
+      categoryId: item.categoryId?._id || item.categoryId || '',
+      unit: item.unit,
+      currentStock: item.currentStock || 0,
+      costPrice: item.costPrice || 0,
+      salePrice: item.salePrice || 0
+    });
+    setShowModal(true);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await api.post('/inventory/items', form);
+      if (editingId) {
+        await api.put(`/inventory/items/${editingId}`, form);
+      } else {
+        await api.post('/inventory/items', form);
+      }
       setShowModal(false);
-      setForm({ code: '', name: '', categoryId: '', unit: 'UND', costPrice: 0, salePrice: 0 });
+      setForm({ code: '', name: '', categoryId: '', unit: 'UND', currentStock: 0, costPrice: 0, salePrice: 0 });
+      setEditingId(null);
       fetchData();
     } catch (e) {
       alert('Error guardando insumo');
@@ -57,7 +77,11 @@ export default function InventoryDashboard() {
             <h2 className="text-3xl font-extrabold tracking-tight text-primary font-headline">Gestión de Inventario</h2>
           </div>
           <div className="flex items-center gap-3">
-            <button onClick={() => setShowModal(true)} className="flex items-center gap-2 px-5 py-2.5 bg-primary text-on-primary rounded-xl font-semibold shadow-lg shadow-primary/10 hover:bg-primary-dim transition-all active:scale-95">
+            <button onClick={() => {
+              setForm({ code: '', name: '', categoryId: '', unit: 'UND', currentStock: 0, costPrice: 0, salePrice: 0 });
+              setEditingId(null);
+              setShowModal(true);
+            }} className="flex items-center gap-2 px-5 py-2.5 bg-primary text-on-primary rounded-xl font-semibold shadow-lg shadow-primary/10 hover:bg-primary-dim transition-all active:scale-95">
               <span className="material-symbols-outlined text-sm font-bold">add</span>
               <span>Agregar Artículo</span>
             </button>
@@ -117,6 +141,9 @@ export default function InventoryDashboard() {
                     </td>
                     <td className="px-6 py-4 text-sm text-right font-semibold">${item.salePrice}</td>
                     <td className="px-6 py-4 text-center">
+                      <button onClick={() => handleEdit(item)} className="inline-flex p-2 rounded-lg hover:bg-surface-container-high transition-colors text-slate-600 hover:text-primary mr-2" title="Editar Insumo">
+                        <span className="material-symbols-outlined text-lg">edit</span>
+                      </button>
                       <Link to={`/inventory/movements/${item._id}`} className="inline-flex p-2 rounded-lg hover:bg-surface-container-high transition-colors text-primary" title="Ver Historial (Kardex)">
                         <span className="material-symbols-outlined text-lg">history</span>
                       </Link>
@@ -132,7 +159,7 @@ export default function InventoryDashboard() {
       {showModal && (
         <div className="fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
           <div className="bg-surface-container-lowest rounded-2xl shadow-xl w-full max-w-lg p-6">
-            <h2 className="text-xl font-bold text-slate-900 mb-6 font-headline">Matricular Nuevo Insumo</h2>
+            <h2 className="text-xl font-bold text-slate-900 mb-6 font-headline">{editingId ? 'Editar Insumo' : 'Matricular Nuevo Insumo'}</h2>
             <form onSubmit={handleSubmit} className="space-y-4 font-body">
               <div className="grid grid-cols-2 gap-4">
                 <div>
@@ -159,6 +186,16 @@ export default function InventoryDashboard() {
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div>
+                  <label className="block text-xs uppercase tracking-widest text-on-surface-variant font-bold mb-1">Stock Inicial / Actual</label>
+                  <input type="number" required className="w-full px-3 py-2 bg-surface-container-low focus:bg-surface-container-lowest ghost-border focus:border-primary focus:ring-0 transition-all rounded-lg outline-none" value={form.currentStock} onChange={e=>setForm({...form, currentStock: parseInt(e.target.value) || 0})} />
+                </div>
+                <div>
+                  <label className="block text-xs uppercase tracking-widest text-on-surface-variant font-bold mb-1">Unidad (E.g. UND, KG)</label>
+                  <input required className="w-full px-3 py-2 bg-surface-container-low focus:bg-surface-container-lowest ghost-border focus:border-primary focus:ring-0 transition-all rounded-lg outline-none" value={form.unit} onChange={e=>setForm({...form, unit: e.target.value})} />
+                </div>
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div>
                   <label className="block text-xs uppercase tracking-widest text-on-surface-variant font-bold mb-1">Costo ($)</label>
                   <input type="number" required className="w-full px-3 py-2 bg-surface-container-low focus:bg-surface-container-lowest ghost-border focus:border-primary focus:ring-0 transition-all rounded-lg outline-none" value={form.costPrice} onChange={e=>setForm({...form, costPrice: e.target.value})} />
                 </div>
@@ -168,7 +205,11 @@ export default function InventoryDashboard() {
                 </div>
               </div>
               <div className="pt-6 flex justify-end space-x-3">
-                <button type="button" onClick={() => setShowModal(false)} className="px-5 py-2.5 font-medium text-slate-600 hover:bg-slate-100 rounded-xl transition-colors">Abortar</button>
+                <button type="button" onClick={() => {
+                  setShowModal(false);
+                  setEditingId(null);
+                  setForm({ code: '', name: '', categoryId: '', unit: 'UND', currentStock: 0, costPrice: 0, salePrice: 0 });
+                }} className="px-5 py-2.5 font-medium text-slate-600 hover:bg-slate-100 rounded-xl transition-colors">Abortar</button>
                 <button type="submit" className="px-5 py-2.5 bg-primary text-white font-medium rounded-xl shadow-md hover:bg-primary-dim transition-colors">Guardar en Base de Datos</button>
               </div>
             </form>

@@ -1,7 +1,12 @@
 const mongoose = require('mongoose');
 
-// Usa la misma URI de tu proyecto
-const mongoUri = 'mongodb+srv://Proyecto_Gestion:si2Tef1oPqQmktog@cluster0.uux2ndk.mongodb.net/yovendo_db';
+
+const mongoUri = process.env.MONGO_URI;
+
+if (!mongoUri) {
+  console.error("No se encontró la variable MONGO_URI en el entorno");
+  process.exit(1);
+}
 
 const categorySchema = new mongoose.Schema({
   name: { type: String, required: true },

@@ -17,10 +17,7 @@ export default function AdminSidebar() {
           </div>
         </div>
         <div className="space-y-1 flex-1">
-          <Link to="/inventory" className="flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300 ease-in-out text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 hover:bg-slate-200/30 dark:hover:bg-slate-800/30 font-inter text-sm font-medium">
-            <span className="material-symbols-outlined">dashboard</span>
-            Dashboard / Inventario
-          </Link>
+          {/* Inventory link hidden for ADMIN; SUPERVISOR uses its own sidebar */}
           <Link to="/admin/users" className="flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300 ease-in-out bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-50 shadow-sm font-inter text-sm font-medium">
             <span className="material-symbols-outlined">group</span>
             Gestión de Usuarios

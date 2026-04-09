@@ -11,7 +11,9 @@ export default function Login() {
   const navigate = useNavigate();
 
   if (user) {
-    return <Navigate to={user.role === 'SUPERVISOR' ? '/inventory' : '/admin/users'} replace />;
+    if (user.role === 'ADMIN') return <Navigate to="/admin/users" replace />;
+    if (user.role === 'SUPERVISOR') return <Navigate to="/inventory" replace />;
+    return <Navigate to="/no-module" replace />;
   }
 
   const handleSubmit = async (e) => {
