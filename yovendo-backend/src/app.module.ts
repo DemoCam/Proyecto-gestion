@@ -7,6 +7,10 @@ import { RolesModule } from './roles/roles.module';
 import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
 import { InventoryModule } from './inventory/inventory.module';
+import { NotificationsModule } from './notifications/notifications.module';
+import { CustomersModule } from './customers/customers.module';
+import { CallsModule } from './calls/calls.module';
+import { SalesModule } from './sales/sales.module';
 
 @Module({
   imports: [
@@ -15,7 +19,11 @@ import { InventoryModule } from './inventory/inventory.module';
     RolesModule,
     UsersModule,
     AuthModule,
-    InventoryModule
+    InventoryModule,
+    NotificationsModule,
+    CustomersModule,
+    CallsModule,
+    SalesModule
   ],
   controllers: [AppController],
   providers: [AppService],

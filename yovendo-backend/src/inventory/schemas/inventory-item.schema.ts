@@ -1,6 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document, Schema as MongooseSchema } from 'mongoose';
-import { User } from '../../users/schemas/user.schema';
+import { Document, Schema as MongooseSchema, Types } from 'mongoose';
 import { InventoryCategory } from './inventory-category.schema';
 
 export type InventoryItemDocument = InventoryItem & Document;
@@ -46,10 +45,10 @@ export class InventoryItem {
   status: ItemStatus;
 
   @Prop({ type: MongooseSchema.Types.ObjectId, ref: 'User' })
-  createdBy: User;
+  createdBy: Types.ObjectId;
 
   @Prop({ type: MongooseSchema.Types.ObjectId, ref: 'User' })
-  updatedBy: User;
+  updatedBy: Types.ObjectId;
 }
 
 export const InventoryItemSchema = SchemaFactory.createForClass(InventoryItem);

@@ -1,6 +1,6 @@
 import React from 'react';
 import { useAuth } from '../context/AuthContext';
-import { Link } from 'react-router-dom';
+import NotificationsBell from './NotificationsBell';
 
 export default function GlobalNavbar() {
   const { user, logout } = useAuth();
@@ -21,6 +21,7 @@ export default function GlobalNavbar() {
       <div className="flex items-center gap-4 ml-auto">
         {user ? (
           <>
+            <NotificationsBell />
             <div className="hidden sm:block text-right mr-2">
               <p className="text-sm font-bold text-on-surface leading-tight">{user.firstName} {user.lastName}</p>
               <p className="text-[10px] text-primary uppercase tracking-widest font-mono font-bold">{user.role}</p>

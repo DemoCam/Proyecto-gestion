@@ -13,6 +13,19 @@ export default function InventoryDashboard() {
   const [form, setForm] = useState({ code: '', name: '', categoryId: '', unit: 'UND', currentStock: 0, costPrice: 0, salePrice: 0 });
   const [catForm, setCatForm] = useState({ name: '', description: '' });
 
+  const normalizeItemForm = (data) => {
+    const code = String(data.code || '').trim();
+    const name = String(data.name || '').trim();
+    const codeLooksLikeName = /[a-zA-Z]/.test(code);
+    const nameLooksLikeCode = /^[0-9._-]+$/.test(name);
+
+    if (codeLooksLikeName && nameLooksLikeCode) {
+      return { ...data, code: name, name: code };
+    }
+
+    return { ...data, code, name };
+  };
+
   const fetchData = async () => {
     try {
       const [itemsRes, catRes] = await Promise.all([api.get('/inventory/items'), api.get('/inventory/categories')]);
@@ -42,10 +55,18 @@ export default function InventoryDashboard() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      const normalizedForm = normalizeItemForm(form);
+      const payload = {
+        ...normalizedForm,
+        currentStock: Number(normalizedForm.currentStock) || 0,
+        costPrice: Number(normalizedForm.costPrice) || 0,
+        salePrice: Number(normalizedForm.salePrice) || 0,
+      };
+
       if (editingId) {
-        await api.put(`/inventory/items/${editingId}`, form);
+        await api.put(`/inventory/items/${editingId}`, payload);
       } else {
-        await api.post('/inventory/items', form);
+        await api.post('/inventory/items', payload);
       }
       setShowModal(false);
       setForm({ code: '', name: '', categoryId: '', unit: 'UND', currentStock: 0, costPrice: 0, salePrice: 0 });
@@ -197,11 +218,11 @@ export default function InventoryDashboard() {
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <label className="block text-xs uppercase tracking-widest text-on-surface-variant font-bold mb-1">Costo ($)</label>
-                  <input type="number" required className="w-full px-3 py-2 bg-surface-container-low focus:bg-surface-container-lowest ghost-border focus:border-primary focus:ring-0 transition-all rounded-lg outline-none" value={form.costPrice} onChange={e=>setForm({...form, costPrice: e.target.value})} />
+                  <input type="number" required className="w-full px-3 py-2 bg-surface-container-low focus:bg-surface-container-lowest ghost-border focus:border-primary focus:ring-0 transition-all rounded-lg outline-none" value={form.costPrice} onChange={e=>setForm({...form, costPrice: Number(e.target.value) || 0})} />
                 </div>
                 <div>
                   <label className="block text-xs uppercase tracking-widest text-on-surface-variant font-bold mb-1">Venta ($)</label>
-                  <input type="number" required className="w-full px-3 py-2 bg-surface-container-low focus:bg-surface-container-lowest ghost-border focus:border-primary focus:ring-0 transition-all rounded-lg outline-none" value={form.salePrice} onChange={e=>setForm({...form, salePrice: e.target.value})} />
+                  <input type="number" required className="w-full px-3 py-2 bg-surface-container-low focus:bg-surface-container-lowest ghost-border focus:border-primary focus:ring-0 transition-all rounded-lg outline-none" value={form.salePrice} onChange={e=>setForm({...form, salePrice: Number(e.target.value) || 0})} />
                 </div>
               </div>
               <div className="pt-6 flex justify-end space-x-3">

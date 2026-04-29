@@ -2,7 +2,7 @@ import React from 'react';
 
 export default function Footer() {
   return (
-    <footer className="w-full py-6 mt-auto bg-transparent border-t border-outline-variant/15 animate-fade-in relative z-20">
+    <footer className="w-full py-6 mt-auto bg-transparent border-t border-outline-variant/15 animate-fade-in relative z-0">
       <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-4">
         <p className="font-body text-xs font-bold tracking-widest text-on-surface-variant uppercase">
           © 2024 Yovendo. Eficiencia Editorial Corporativa.

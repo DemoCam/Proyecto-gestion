@@ -4,6 +4,12 @@ import { Model } from 'mongoose';
 import { InventoryCategory, InventoryCategoryDocument } from './schemas/inventory-category.schema';
 import { InventoryItem, InventoryItemDocument, ItemStatus } from './schemas/inventory-item.schema';
 import { InventoryMovement, InventoryMovementDocument, MovementType } from './schemas/inventory-movement.schema';
+import { NotificationsService } from '../notifications/notifications.service';
+import { NotificationType, RelatedEntityType } from '../notifications/schemas/notification.schema';
+import { CreateCategoryDto } from './dto/create-category.dto';
+import { CreateItemDto } from './dto/create-item.dto';
+import { UpdateItemDto } from './dto/update-item.dto';
+import { RecordMovementDto } from './dto/record-movement.dto';
 
 @Injectable()
 export class InventoryService {
@@ -11,13 +17,14 @@ export class InventoryService {
     @InjectModel(InventoryCategory.name) private categoryModel: Model<InventoryCategoryDocument>,
     @InjectModel(InventoryItem.name) private itemModel: Model<InventoryItemDocument>,
     @InjectModel(InventoryMovement.name) private movementModel: Model<InventoryMovementDocument>,
+    private readonly notificationsService: NotificationsService,
   ) {}
 
   // CATEGORIES
   async getCategories() {
     return this.categoryModel.find().exec();
   }
-  async createCategory(dto: any) {
+  async createCategory(dto: CreateCategoryDto) {
     return new this.categoryModel(dto).save();
   }
 
@@ -25,15 +32,31 @@ export class InventoryService {
   async getItems() {
     return this.itemModel.find().populate('categoryId').exec();
   }
-  async createItem(dto: any, userId: string) {
-    return new this.itemModel({ ...dto, createdBy: userId }).save();
+
+  async findItemById(id: string) {
+    const item = await this.itemModel.findById(id).exec();
+    if (!item) {
+      throw new NotFoundException('Item not found');
+    }
+    return item;
   }
-  async updateItem(id: string, dto: any, userId: string) {
-    return this.itemModel.findByIdAndUpdate(id, { ...dto, updatedBy: userId }, { new: true }).exec();
+  async createItem(dto: CreateItemDto, userId: string) {
+    const item = await new this.itemModel({ ...dto, createdBy: userId }).save();
+    if (item.currentStock <= item.minimumStock) {
+      await this.notifyLowStock(item);
+    }
+    return item;
+  }
+  async updateItem(id: string, dto: UpdateItemDto, userId: string) {
+    const item = await this.itemModel.findByIdAndUpdate(id, { ...dto, updatedBy: userId }, { new: true }).exec();
+    if (item && item.currentStock <= item.minimumStock) {
+      await this.notifyLowStock(item);
+    }
+    return item;
   }
 
   // MOVEMENTS
-  async recordMovement(itemId: string, dto: any, userId: string) {
+  async recordMovement(itemId: string, dto: RecordMovementDto, userId: string) {
     const item = await this.itemModel.findById(itemId);
     if (!item) throw new NotFoundException('Item not found');
 
@@ -69,10 +92,36 @@ export class InventoryService {
       reference: dto.reference,
       performedBy: userId
     });
-    return movement.save();
+    const savedMovement = await movement.save();
+
+    await this.notificationsService.create({
+      title: 'Movimiento de inventario',
+      message: `Se registró un movimiento ${dto.type} para ${item.name}.`,
+      type: NotificationType.INVENTORY,
+      targetRole: 'SUPERVISOR',
+      relatedEntityType: RelatedEntityType.INVENTORY_MOVEMENT,
+      relatedEntityId: savedMovement._id.toString(),
+    });
+
+    if (item.currentStock <= item.minimumStock) {
+      await this.notifyLowStock(item);
+    }
+
+    return savedMovement;
   }
 
   async getMovements(itemId: string) {
-    return this.movementModel.find({ itemId: itemId as any }).populate('performedBy', 'firstName lastName').sort({ createdAt: -1 }).exec();
+    return this.movementModel.find({ itemId }).populate('performedBy', 'firstName lastName').sort({ createdAt: -1 }).exec();
+  }
+
+  private async notifyLowStock(item: InventoryItemDocument) {
+    await this.notificationsService.create({
+      title: 'Stock bajo',
+      message: `${item.name} está en ${item.currentStock} ${item.unit}; mínimo definido: ${item.minimumStock}.`,
+      type: NotificationType.WARNING,
+      targetRole: 'SUPERVISOR',
+      relatedEntityType: RelatedEntityType.INVENTORY_ITEM,
+      relatedEntityId: item._id.toString(),
+    });
   }
 }

@@ -6,6 +6,7 @@ import { SetMetadata } from '@nestjs/common';
 import { CreateItemDto } from './dto/create-item.dto';
 import { UpdateItemDto } from './dto/update-item.dto';
 import { RecordMovementDto } from './dto/record-movement.dto';
+import { CreateCategoryDto } from './dto/create-category.dto';
 
 const Roles = (...roles: string[]) => SetMetadata('roles', roles);
 
@@ -16,12 +17,14 @@ export class InventoryController {
   constructor(private readonly inventoryService: InventoryService) {}
 
   @Get('categories')
+  @Roles('SUPERVISOR', 'CONSULTOR')
   async getCategories() { return this.inventoryService.getCategories(); }
 
   @Post('categories')
-  async createCategory(@Body() dto: any) { return this.inventoryService.createCategory(dto); }
+  async createCategory(@Body() dto: CreateCategoryDto) { return this.inventoryService.createCategory(dto); }
 
   @Get('items')
+  @Roles('SUPERVISOR', 'CONSULTOR')
   async getItems() { return this.inventoryService.getItems(); }
 
   @Post('items')

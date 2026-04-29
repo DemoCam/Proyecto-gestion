@@ -1,7 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document, Schema as MongooseSchema } from 'mongoose';
-import { InventoryItem } from './inventory-item.schema';
-import { User } from '../../users/schemas/user.schema';
+import { Document, Schema as MongooseSchema, Types } from 'mongoose';
 
 export type InventoryMovementDocument = InventoryMovement & Document;
 
@@ -14,7 +12,7 @@ export enum MovementType {
 @Schema({ timestamps: true })
 export class InventoryMovement {
   @Prop({ type: MongooseSchema.Types.ObjectId, ref: 'InventoryItem', required: true })
-  itemId: InventoryItem;
+  itemId: Types.ObjectId;
 
   @Prop({ type: String, enum: MovementType, required: true })
   type: MovementType;
@@ -35,7 +33,7 @@ export class InventoryMovement {
   reference: string;
 
   @Prop({ type: MongooseSchema.Types.ObjectId, ref: 'User', required: true })
-  performedBy: User;
+  performedBy: Types.ObjectId;
 }
 
 export const InventoryMovementSchema = SchemaFactory.createForClass(InventoryMovement);

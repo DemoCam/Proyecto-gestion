@@ -1,4 +1,5 @@
 import { IsString, IsOptional, IsNumber, IsEnum, IsMongoId } from 'class-validator';
+import { Type } from 'class-transformer';
 import { ItemStatus } from '../schemas/inventory-item.schema';
 
 export class UpdateItemDto {
@@ -23,22 +24,27 @@ export class UpdateItemDto {
   unit?: string;
 
   @IsNumber()
+  @Type(() => Number)
   @IsOptional()
   currentStock?: number;
 
   @IsNumber()
+  @Type(() => Number)
   @IsOptional()
   minimumStock?: number;
 
   @IsNumber()
+  @Type(() => Number)
   @IsOptional()
   maximumStock?: number;
 
   @IsNumber()
+  @Type(() => Number)
   @IsOptional()
   costPrice?: number;
 
   @IsNumber()
+  @Type(() => Number)
   @IsOptional()
   salePrice?: number;
 
