@@ -8,6 +8,16 @@ export default function Login() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const [activeSlide, setActiveSlide] = useState(0);
+  const [cardMotion, setCardMotion] = useState({
+    rotateX: 0,
+    rotateY: 0,
+    glowX: 50,
+    glowY: 50,
+    parallaxX: 0,
+    parallaxY: 0,
+    particleX: 0,
+    particleY: 0,
+  });
   const { login, user } = useAuth();
 
   const slides = [
@@ -17,6 +27,8 @@ export default function Login() {
       title: 'Ecosistema operativo conectado y en tiempo real.',
       copy: 'Sincronización de inventarios, gestión de usuarios y trazabilidad comercial desde una sola operación segura.',
       icon: 'language',
+      orbit: ['Inventario', 'Roles', 'Ventas'],
+      scene: 'network',
     },
     {
       image: '/hero.png',
@@ -24,6 +36,8 @@ export default function Login() {
       title: 'Seguimiento claro para clientes, llamadas y ventas.',
       copy: 'Cada perfil trabaja con una interfaz enfocada en sus responsabilidades y con datos protegidos por rol.',
       icon: 'monitoring',
+      orbit: ['Clientes', 'Llamadas', 'Reportes'],
+      scene: 'dashboard',
     },
     {
       image: '/login-bg.png',
@@ -31,8 +45,43 @@ export default function Login() {
       title: 'Notificaciones internas para actuar a tiempo.',
       copy: 'Alertas de stock, movimientos y actividad comercial disponibles dentro de la aplicación.',
       icon: 'notifications',
+      orbit: ['Alertas', 'Stock', 'Actividad'],
+      scene: 'security',
     },
   ];
+
+  const activeOrbit = slides[activeSlide].orbit;
+  const activeScene = slides[activeSlide].scene;
+
+  const handleCardMove = (event) => {
+    const rect = event.currentTarget.getBoundingClientRect();
+    const x = (event.clientX - rect.left) / rect.width;
+    const y = (event.clientY - rect.top) / rect.height;
+
+    setCardMotion({
+      rotateX: (0.5 - y) * 12,
+      rotateY: (x - 0.5) * 16,
+      glowX: x * 100,
+      glowY: y * 100,
+      parallaxX: (x - 0.5) * 28,
+      parallaxY: (y - 0.5) * 28,
+      particleX: (x - 0.5) * 52,
+      particleY: (y - 0.5) * 52,
+    });
+  };
+
+  const resetCardMotion = () => {
+    setCardMotion({
+      rotateX: 0,
+      rotateY: 0,
+      glowX: 50,
+      glowY: 50,
+      parallaxX: 0,
+      parallaxY: 0,
+      particleX: 0,
+      particleY: 0,
+    });
+  };
 
   useEffect(() => {
     const intervalId = window.setInterval(() => {
@@ -151,8 +200,32 @@ export default function Login() {
           </div>
         </div>
 
-        <div className="hidden lg:block lg:w-[55%] relative bg-inverse-surface overflow-hidden">
-          <div className="absolute inset-0 z-0 animate-scale-in">
+        <div
+          className="hidden lg:block lg:w-[55%] relative bg-inverse-surface overflow-hidden"
+          onMouseMove={handleCardMove}
+          onMouseLeave={resetCardMotion}
+          style={{
+            '--parallax-x': `${cardMotion.parallaxX}px`,
+            '--parallax-y': `${cardMotion.parallaxY}px`,
+            '--bg-x': `${cardMotion.parallaxX * -0.28}px`,
+            '--bg-y': `${cardMotion.parallaxY * -0.28}px`,
+            '--atmosphere-x': `${cardMotion.parallaxX * -0.12}px`,
+            '--atmosphere-y': `${cardMotion.parallaxY * -0.12}px`,
+            '--copy-x': `${cardMotion.parallaxX * -0.16}px`,
+            '--copy-y': `${cardMotion.parallaxY * -0.16}px`,
+            '--scene-x': `${cardMotion.parallaxX * 0.38}px`,
+            '--scene-y': `${cardMotion.parallaxY * 0.38}px`,
+            '--card-1-x': `${cardMotion.parallaxX * 0.18}px`,
+            '--card-1-y': `${cardMotion.parallaxY * 0.18}px`,
+            '--card-2-x': `${cardMotion.parallaxX * -0.12}px`,
+            '--card-2-y': `${cardMotion.parallaxY * -0.12}px`,
+            '--card-3-x': `${cardMotion.parallaxX * 0.24}px`,
+            '--card-3-y': `${cardMotion.parallaxY * 0.24}px`,
+            '--particle-x': `${cardMotion.particleX}px`,
+            '--particle-y': `${cardMotion.particleY}px`,
+          }}
+        >
+          <div className="login-parallax-bg absolute inset-0 z-0 animate-scale-in">
             {slides.map((slide, index) => (
               <div
                 key={slide.title}
@@ -165,19 +238,78 @@ export default function Login() {
             <div className="absolute inset-0 bg-primary/40 backdrop-brightness-75 mix-blend-multiply"></div>
             <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-inverse-surface to-transparent"></div>
           </div>
+          <div className={`login-slide-atmosphere login-slide-atmosphere-${activeScene}`}></div>
 
-          <div className="absolute right-20 top-20 z-10 [perspective:1200px]">
-            <div className="relative w-52 h-52 [transform-style:preserve-3d] rotate-[-8deg]">
-              <div className="absolute inset-8 rounded-2xl bg-primary-container/20 border border-white/10 shadow-2xl [transform:rotateX(58deg)_rotateZ(42deg)]"></div>
-              <div className="absolute left-10 top-6 w-28 h-28 rounded-2xl bg-white/10 backdrop-blur-xl border border-white/15 shadow-xl [transform:translateZ(34px)_rotateX(58deg)_rotateZ(42deg)] flex items-center justify-center">
-                <span className="material-symbols-outlined text-primary-container text-4xl">hub</span>
+          <div
+            className="absolute right-10 top-12 z-10 w-[30rem] h-[30rem] [perspective:1200px] pointer-events-none"
+            style={{
+              '--card-rotate-x': `${cardMotion.rotateX}deg`,
+              '--card-rotate-y': `${cardMotion.rotateY}deg`,
+              '--card-glow-x': `${cardMotion.glowX}%`,
+              '--card-glow-y': `${cardMotion.glowY}%`,
+            }}
+          >
+            <div className="login-3d-scene absolute inset-0 [transform-style:preserve-3d]">
+              <div className="login-depth-grid"></div>
+              <div className={`login-slide-visual login-slide-visual-${activeScene}`}>
+                <span></span>
+                <span></span>
+                <span></span>
               </div>
-              <div className="absolute right-4 bottom-10 w-20 h-20 rounded-xl bg-primary-container/25 backdrop-blur-xl border border-white/10 shadow-xl [transform:translateZ(62px)_rotateX(58deg)_rotateZ(42deg)]"></div>
-              <div className="absolute left-2 bottom-14 w-16 h-16 rounded-xl bg-white/10 backdrop-blur-xl border border-white/10 shadow-xl [transform:translateZ(46px)_rotateX(58deg)_rotateZ(42deg)]"></div>
+
+              <div className="login-3d-ring absolute left-1/2 top-1/2 w-80 h-80 -ml-40 -mt-40 rounded-full border border-primary-container/25 shadow-[0_0_70px_rgba(216,227,251,0.16)]"></div>
+              <div className="login-3d-ring login-3d-ring-delayed absolute left-1/2 top-1/2 w-56 h-56 -ml-28 -mt-28 rounded-full border border-white/15"></div>
+
+              <div className="login-access-card absolute left-1/2 top-1/2 w-72 h-44 -translate-x-1/2 -translate-y-1/2 rounded-[1.35rem] overflow-hidden border border-white/20 shadow-2xl">
+                <div className="login-access-card-glow"></div>
+                <div className="relative z-10 h-full p-5 flex flex-col justify-between">
+                  <div className="flex items-start justify-between">
+                    <div>
+                      <span className="block text-[9px] uppercase tracking-[0.22em] text-primary-container/70 font-bold">Yovendo</span>
+                      <span className="block mt-1 text-lg text-white font-black leading-none">Access Card</span>
+                    </div>
+                    <span className="material-symbols-outlined text-primary-container text-3xl">{slides[activeSlide].icon}</span>
+                  </div>
+
+                  <div className="flex items-end justify-between">
+                    <div>
+                      <div className="login-card-chip mb-4">
+                        <span></span>
+                        <span></span>
+                      </div>
+                      <span className="block text-[9px] uppercase tracking-[0.2em] text-primary-container/55 font-bold">Modulo activo</span>
+                      <span className="block mt-1 text-sm text-white font-extrabold">{slides[activeSlide].eyebrow}</span>
+                    </div>
+
+                    <div className="text-right">
+                      <span className="block text-[9px] uppercase tracking-[0.2em] text-primary-container/55 font-bold">Estado</span>
+                      <span className="mt-1 inline-flex items-center gap-1.5 text-[10px] uppercase tracking-[0.14em] text-primary-container font-black">
+                        <span className="w-1.5 h-1.5 rounded-full bg-primary-container shadow-[0_0_12px_rgba(216,227,251,0.9)]"></span>
+                        Seguro
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {activeOrbit.map((label, index) => (
+                <div
+                  key={`${slides[activeSlide].eyebrow}-${label}`}
+                  className={`login-3d-card login-3d-card-${index + 1} absolute w-32 h-20 rounded-2xl bg-surface-container-lowest/10 backdrop-blur-2xl border border-white/15 shadow-2xl flex flex-col justify-center px-4`}
+                >
+                  <span className="text-[9px] uppercase tracking-[0.18em] text-primary-container/60 font-bold">Nodo</span>
+                  <span className="mt-1 text-sm text-white font-black leading-none">{label}</span>
+                </div>
+              ))}
+
+              <div className="login-3d-beam absolute left-20 top-20 w-40 h-40 rounded-full bg-primary-container/20 blur-3xl"></div>
+              <div className="login-3d-dot login-3d-dot-1"></div>
+              <div className="login-3d-dot login-3d-dot-2"></div>
+              <div className="login-3d-dot login-3d-dot-3"></div>
             </div>
           </div>
 
-          <div className="absolute bottom-16 left-16 right-16 z-10 animate-slide-up delay-500">
+          <div className="login-parallax-copy absolute bottom-16 left-16 right-16 z-10 animate-slide-up delay-500">
             <div className="p-8 bg-surface-container-lowest/10 backdrop-blur-[32px] rounded-3xl max-w-lg border border-white/10 shadow-2xl overflow-hidden relative">
               <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-primary-container to-transparent opacity-50"></div>
               <div className="flex items-center gap-3 mb-6">

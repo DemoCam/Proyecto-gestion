@@ -94,6 +94,58 @@
   to { opacity: 1; transform: scale(1); }
 }
 
+@keyframes login-scene-drift {
+  0%, 100% { transform: translate3d(var(--scene-x, 0px), var(--scene-y, 0px), 0) rotateX(62deg) rotateZ(-18deg); }
+  50% { transform: translate3d(var(--scene-x, 0px), var(--scene-y, 0px), 32px) rotateX(56deg) rotateZ(-8deg); }
+}
+
+@keyframes login-ring-spin {
+  from { transform: rotateX(72deg) rotateZ(0deg); }
+  to { transform: rotateX(72deg) rotateZ(360deg); }
+}
+
+@keyframes login-core-float {
+  0%, 100% { transform: translateZ(86px) rotateX(-62deg) rotateZ(18deg) translateY(0); }
+  50% { transform: translateZ(116px) rotateX(-56deg) rotateZ(8deg) translateY(-10px); }
+}
+
+@keyframes login-card-scan {
+  0% { transform: translateY(-120%) rotate(12deg); opacity: 0; }
+  18% { opacity: 0.5; }
+  45% { opacity: 0.2; }
+  100% { transform: translateY(145%) rotate(12deg); opacity: 0; }
+}
+
+@keyframes login-card-float {
+  0%, 100% { transform: var(--login-card-transform) translateY(0); }
+  50% { transform: var(--login-card-transform) translateY(-16px); }
+}
+
+@keyframes login-beam-pulse {
+  0%, 100% { opacity: 0.28; transform: translateZ(-40px) scale(0.82); }
+  50% { opacity: 0.58; transform: translateZ(20px) scale(1.08); }
+}
+
+@keyframes login-dot-orbit {
+  from { transform: translate3d(var(--particle-x, 0px), var(--particle-y, 0px), 0) rotateZ(var(--login-dot-angle)) translateX(180px) rotateZ(calc(var(--login-dot-angle) * -1)) translateZ(46px); }
+  to { transform: translate3d(var(--particle-x, 0px), var(--particle-y, 0px), 0) rotateZ(calc(var(--login-dot-angle) + 360deg)) translateX(180px) rotateZ(calc((var(--login-dot-angle) + 360deg) * -1)) translateZ(46px); }
+}
+
+@keyframes login-network-pulse {
+  0%, 100% { opacity: 0.32; transform: scale(0.96) translateZ(18px); }
+  50% { opacity: 0.72; transform: scale(1.04) translateZ(54px); }
+}
+
+@keyframes login-dashboard-rise {
+  0%, 100% { transform: scaleY(0.56) translateZ(24px); opacity: 0.42; }
+  50% { transform: scaleY(1) translateZ(72px); opacity: 0.82; }
+}
+
+@keyframes login-security-sweep {
+  from { transform: rotateZ(0deg) translateZ(44px); }
+  to { transform: rotateZ(360deg) translateZ(44px); }
+}
+
 @layer utilities {
   .animate-fade-in {
     animation: fade-in 0.4s ease-out forwards;
@@ -113,4 +165,294 @@
   .delay-300 { animation-delay: 300ms; }
   .delay-400 { animation-delay: 400ms; }
   .delay-500 { animation-delay: 500ms; }
+}
+
+@layer components {
+  .login-parallax-bg {
+    transform: translate3d(var(--bg-x, 0px), var(--bg-y, 0px), 0) scale(1.04);
+    transition: transform 180ms ease-out;
+  }
+
+  .login-parallax-copy {
+    transform: translate3d(var(--copy-x, 0px), var(--copy-y, 0px), 0);
+    transition: transform 180ms ease-out;
+  }
+
+  .login-slide-atmosphere {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    opacity: 0.72;
+    transform: translate3d(var(--atmosphere-x, 0px), var(--atmosphere-y, 0px), 0);
+    transition: transform 180ms ease-out, background 300ms ease;
+  }
+
+  .login-slide-atmosphere-network {
+    background:
+      radial-gradient(circle at 72% 24%, rgba(216, 227, 251, 0.2), transparent 18%),
+      linear-gradient(120deg, transparent 0 24%, rgba(216, 227, 251, 0.1) 24.2% 24.6%, transparent 24.8% 100%);
+  }
+
+  .login-slide-atmosphere-dashboard {
+    background:
+      linear-gradient(90deg, transparent 0 8%, rgba(216, 227, 251, 0.08) 8.2% 8.6%, transparent 8.8% 100%),
+      linear-gradient(0deg, transparent 0 16%, rgba(216, 227, 251, 0.06) 16.2% 16.6%, transparent 16.8% 100%);
+    background-size: 140px 140px, 110px 110px;
+  }
+
+  .login-slide-atmosphere-security {
+    background:
+      radial-gradient(circle at 72% 30%, transparent 0 16%, rgba(216, 227, 251, 0.13) 16.4% 16.8%, transparent 17.2% 26%, rgba(216, 227, 251, 0.08) 26.4% 26.8%, transparent 27.2%),
+      radial-gradient(circle at 48% 52%, rgba(216, 227, 251, 0.12), transparent 22%);
+  }
+
+  .login-3d-scene {
+    animation: login-scene-drift 10s ease-in-out infinite;
+  }
+
+  .login-depth-grid {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 24rem;
+    height: 24rem;
+    margin-left: -12rem;
+    margin-top: -12rem;
+    border-radius: 2rem;
+    background:
+      linear-gradient(rgba(216, 227, 251, 0.1) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(216, 227, 251, 0.1) 1px, transparent 1px);
+    background-size: 2.5rem 2.5rem;
+    mask-image: radial-gradient(circle, black, transparent 70%);
+    transform: translateZ(-54px) rotateX(72deg) rotateZ(28deg);
+  }
+
+  .login-slide-visual {
+    position: absolute;
+    inset: 0;
+    transform-style: preserve-3d;
+    transition: opacity 240ms ease;
+  }
+
+  .login-slide-visual span {
+    position: absolute;
+    display: block;
+  }
+
+  .login-slide-visual-network span {
+    width: 8.5rem;
+    height: 1px;
+    left: 12rem;
+    top: 13rem;
+    background: linear-gradient(90deg, transparent, rgba(216, 227, 251, 0.72), transparent);
+    animation: login-network-pulse 3.8s ease-in-out infinite;
+    transform-origin: left center;
+  }
+
+  .login-slide-visual-network span:nth-child(1) {
+    transform: rotateZ(-28deg) translateZ(42px);
+  }
+
+  .login-slide-visual-network span:nth-child(2) {
+    transform: rotateZ(18deg) translateZ(64px);
+    animation-delay: -1.2s;
+  }
+
+  .login-slide-visual-network span:nth-child(3) {
+    transform: rotateZ(68deg) translateZ(34px);
+    animation-delay: -2.4s;
+  }
+
+  .login-slide-visual-dashboard span {
+    bottom: 7rem;
+    width: 2.3rem;
+    border-radius: 0.7rem 0.7rem 0.2rem 0.2rem;
+    background: linear-gradient(180deg, rgba(216, 227, 251, 0.8), rgba(216, 227, 251, 0.12));
+    transform-origin: bottom;
+    animation: login-dashboard-rise 3.4s ease-in-out infinite;
+  }
+
+  .login-slide-visual-dashboard span:nth-child(1) {
+    left: 5.5rem;
+    height: 8rem;
+  }
+
+  .login-slide-visual-dashboard span:nth-child(2) {
+    left: 8.6rem;
+    height: 11rem;
+    animation-delay: -1.1s;
+  }
+
+  .login-slide-visual-dashboard span:nth-child(3) {
+    left: 11.7rem;
+    height: 6.8rem;
+    animation-delay: -2.2s;
+  }
+
+  .login-slide-visual-security span {
+    left: 50%;
+    top: 50%;
+    width: 20rem;
+    height: 20rem;
+    margin-left: -10rem;
+    margin-top: -10rem;
+    border-radius: 9999px;
+    border: 1px solid rgba(216, 227, 251, 0.16);
+    border-top-color: rgba(216, 227, 251, 0.72);
+    animation: login-security-sweep 8s linear infinite;
+  }
+
+  .login-slide-visual-security span:nth-child(2) {
+    width: 15rem;
+    height: 15rem;
+    margin-left: -7.5rem;
+    margin-top: -7.5rem;
+    animation-duration: 6s;
+    animation-direction: reverse;
+  }
+
+  .login-slide-visual-security span:nth-child(3) {
+    width: 10rem;
+    height: 10rem;
+    margin-left: -5rem;
+    margin-top: -5rem;
+    animation-duration: 4.8s;
+  }
+
+  .login-3d-ring {
+    animation: login-ring-spin 16s linear infinite;
+    background:
+      radial-gradient(circle at center, transparent 57%, rgba(216, 227, 251, 0.08) 58%, transparent 68%),
+      conic-gradient(from 90deg, transparent, rgba(216, 227, 251, 0.44), transparent 42%, rgba(255, 255, 255, 0.18), transparent 72%);
+  }
+
+  .login-3d-ring-delayed {
+    animation-duration: 11s;
+    animation-direction: reverse;
+  }
+
+  .login-3d-core {
+    animation: login-core-float 5s ease-in-out infinite;
+  }
+
+  .login-access-card {
+    background:
+      linear-gradient(135deg, rgba(255, 255, 255, 0.22), rgba(216, 227, 251, 0.08) 42%, rgba(12, 18, 22, 0.78)),
+      repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.07) 0 1px, transparent 1px 17px);
+    transform:
+      translate(-50%, -50%)
+      translateZ(112px)
+      rotateX(calc(-58deg + var(--card-rotate-x, 0deg)))
+      rotateZ(14deg)
+      rotateY(var(--card-rotate-y, 0deg));
+    transform-style: preserve-3d;
+    transition: transform 160ms ease-out, border-color 160ms ease-out;
+  }
+
+  .login-access-card::before {
+    content: "";
+    position: absolute;
+    inset: -35%;
+    background: linear-gradient(90deg, transparent 35%, rgba(255, 255, 255, 0.42), transparent 65%);
+    animation: login-card-scan 4.6s ease-in-out infinite;
+  }
+
+  .login-access-card::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(circle at var(--card-glow-x, 50%) var(--card-glow-y, 50%), rgba(216, 227, 251, 0.48), transparent 34%),
+      linear-gradient(135deg, transparent, rgba(255, 255, 255, 0.18) 48%, transparent 52%);
+    mix-blend-mode: screen;
+    opacity: 0.78;
+  }
+
+  .login-access-card-glow {
+    position: absolute;
+    inset: -1px;
+    background:
+      radial-gradient(circle at var(--card-glow-x, 50%) var(--card-glow-y, 50%), rgba(216, 227, 251, 0.3), transparent 38%),
+      linear-gradient(135deg, rgba(216, 227, 251, 0.2), transparent 42%);
+  }
+
+  .login-card-chip {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.25rem;
+    width: 2.5rem;
+    height: 1.75rem;
+    padding: 0.25rem;
+    border-radius: 0.5rem;
+    background: linear-gradient(135deg, rgba(216, 227, 251, 0.95), rgba(113, 124, 130, 0.62));
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.42), 0 12px 28px rgba(0, 0, 0, 0.18);
+  }
+
+  .login-card-chip span {
+    border-radius: 0.1875rem;
+    background: rgba(42, 52, 57, 0.28);
+  }
+
+  .login-3d-card {
+    animation: login-card-float 5.5s ease-in-out infinite;
+    transform-style: preserve-3d;
+  }
+
+  .login-3d-card-1 {
+    --login-card-transform: translate3d(calc(30px + var(--card-1-x, 0px)), calc(82px + var(--card-1-y, 0px)), 74px) rotateX(-62deg) rotateZ(18deg);
+  }
+
+  .login-3d-card-2 {
+    --login-card-transform: translate3d(calc(260px + var(--card-2-x, 0px)), calc(170px + var(--card-2-y, 0px)), 38px) rotateX(-62deg) rotateZ(18deg);
+    animation-delay: -1.5s;
+  }
+
+  .login-3d-card-3 {
+    --login-card-transform: translate3d(calc(145px + var(--card-3-x, 0px)), calc(330px + var(--card-3-y, 0px)), 96px) rotateX(-62deg) rotateZ(18deg);
+    animation-delay: -3s;
+  }
+
+  .login-3d-beam {
+    animation: login-beam-pulse 4.8s ease-in-out infinite;
+  }
+
+  .login-3d-dot {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 0.625rem;
+    height: 0.625rem;
+    border-radius: 9999px;
+    background: rgba(216, 227, 251, 0.9);
+    box-shadow: 0 0 22px rgba(216, 227, 251, 0.72);
+    transform-style: preserve-3d;
+    animation: login-dot-orbit 8s linear infinite;
+  }
+
+  .login-3d-dot-1 {
+    --login-dot-angle: 0deg;
+  }
+
+  .login-3d-dot-2 {
+    --login-dot-angle: 120deg;
+    animation-duration: 10s;
+  }
+
+  .login-3d-dot-3 {
+    --login-dot-angle: 240deg;
+    animation-duration: 12s;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .login-3d-scene,
+    .login-3d-ring,
+    .login-3d-core,
+    .login-3d-card,
+    .login-3d-beam,
+    .login-3d-dot {
+      animation-duration: 1ms;
+      animation-iteration-count: 1;
+    }
+  }
 }
