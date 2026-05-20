@@ -9,6 +9,7 @@ import NoModule from './pages/NoModule';
 import Customers from './pages/consultant/Customers';
 import Calls from './pages/consultant/Calls';
 import Sales from './pages/consultant/Sales';
+import Board from './pages/consultant/Board';
 import DirectorOverview from './pages/director/DirectorOverview';
 import { useAuth } from './context/AuthContext';
 
@@ -32,6 +33,7 @@ function App() {
 
       {/* RUTAS DE CONSULTOR */}
       <Route element={<Layout requiredRole="CONSULTOR" />}>
+        <Route path="/consultant/board" element={<Board />} />
         <Route path="/consultant/customers" element={<Customers />} />
         <Route path="/consultant/calls" element={<Calls />} />
         <Route path="/consultant/sales" element={<Sales />} />

@@ -22,6 +22,12 @@ export default function GlobalSidebar() {
       active: location.pathname.startsWith('/admin'),
     },
     user.role === 'CONSULTOR' && {
+      to: '/consultant/board',
+      icon: 'view_kanban',
+      label: 'Embudo',
+      active: location.pathname.startsWith('/consultant/board'),
+    },
+    user.role === 'CONSULTOR' && {
       to: '/consultant/customers',
       icon: 'contacts',
       label: 'Clientes',
@@ -42,7 +48,7 @@ export default function GlobalSidebar() {
     user.role === 'DIRECTOR' && {
       to: '/director/overview',
       icon: 'monitoring',
-      label: 'Seguimiento General',
+      label: 'Tablero de Dirección',
       active: location.pathname.startsWith('/director'),
     },
   ].filter(Boolean);

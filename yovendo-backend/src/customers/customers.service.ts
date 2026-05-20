@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { Model, Types } from 'mongoose';
 import { NotificationsService } from '../notifications/notifications.service';
 import { NotificationType, RelatedEntityType } from '../notifications/schemas/notification.schema';
 import { CreateCustomerDto } from './dto/create-customer.dto';
@@ -48,6 +48,13 @@ export class CustomersService {
       .exec();
   }
 
+  async findByConsultant(consultantId: string) {
+    return this.customerModel
+      .find({ assignedConsultantId: new Types.ObjectId(consultantId) })
+      .sort({ createdAt: -1 })
+      .exec();
+  }
+
   async findOneForConsultant(id: string, consultantId: string) {
     const customer = await this.customerModel.findById(id).exec();
     if (!customer) {
@@ -68,5 +75,36 @@ export class CustomersService {
     ]);
 
     return { total, inFollowUp };
+  }
+
+  async countsByConsultant(): Promise<
+    { consultantId: string; total: number; won: number; inFollowUp: number }[]
+  > {
+    const rows = await this.customerModel.aggregate<{
+      _id: any;
+      total: number;
+      won: number;
+      inFollowUp: number;
+    }>([
+      {
+        $group: {
+          _id: '$assignedConsultantId',
+          total: { $sum: 1 },
+          won: {
+            $sum: { $cond: [{ $eq: ['$status', CustomerStatus.WON] }, 1, 0] },
+          },
+          inFollowUp: {
+            $sum: { $cond: [{ $eq: ['$status', CustomerStatus.IN_FOLLOW_UP] }, 1, 0] },
+          },
+        },
+      },
+    ]);
+
+    return rows.map((row) => ({
+      consultantId: row._id?.toString() ?? '',
+      total: row.total,
+      won: row.won,
+      inFollowUp: row.inFollowUp,
+    }));
   }
 }

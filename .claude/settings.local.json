@@ -1,0 +1,20 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(Get-ChildItem -Path \"D:\\\\proyectos\\\\Proyecto_gestion\" -Force)",
+      "Bash(Select-Object -Property Name, PSIsContainer)",
+      "Bash(dir /s /b)",
+      "PowerShell(Get-ChildItem -Path \"D:\\\\proyectos\\\\Proyecto_gestion\" -Recurse -ErrorAction SilentlyContinue | Select-Object -First 50 | ForEach-Object { $_.FullName })",
+      "Bash(xargs ls -lah)",
+      "Bash(cd /d D:\\\\proyectos\\\\Proyecto_gestion\\\\yovendo-backend)",
+      "Bash(npx tsc *)",
+      "Bash(npm install *)",
+      "Bash(npx vite *)",
+      "Bash(npm run *)",
+      "Read(//tmp/**)",
+      "Bash(curl -s -o /dev/null -w '%{http_code}\\\\n' http://localhost:3000/sales/dashboard/director -H 'Authorization: Bearer __TRACKED_VAR__')",
+      "Bash(taskkill //F //IM node.exe)",
+      "Bash(node -e ' *)"
+    ]
+  }
+}

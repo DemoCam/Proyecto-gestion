@@ -77,4 +77,18 @@ export class UsersService {
     const users = await this.userModel.find().populate('roleId').exec();
     return { total: users.filter((user) => user.roleId?.name === 'CONSULTOR').length };
   }
+
+  async findConsultants(): Promise<
+    { id: string; firstName: string; lastName: string; status: UserStatus }[]
+  > {
+    const users = await this.userModel.find().populate('roleId').exec();
+    return users
+      .filter((user) => user.roleId?.name === 'CONSULTOR')
+      .map((user) => ({
+        id: user._id.toString(),
+        firstName: user.firstName,
+        lastName: user.lastName,
+        status: user.status,
+      }));
+  }
 }

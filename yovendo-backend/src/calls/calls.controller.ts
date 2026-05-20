@@ -24,6 +24,24 @@ export class CallsController {
     return this.callsService.summaryForDirector();
   }
 
+  @Get('board')
+  @Roles('CONSULTOR')
+  async board(@Request() req) {
+    return this.callsService.boardForConsultant(req.user.userId);
+  }
+
+  @Get('follow-ups/due')
+  @Roles('CONSULTOR')
+  async dueFollowUps(@Request() req) {
+    return this.callsService.findDueFollowUps(req.user.userId);
+  }
+
+  @Post('reminders/run')
+  @Roles('ADMIN', 'DIRECTOR')
+  async runReminders() {
+    return this.callsService.runFollowUpReminders();
+  }
+
   @Get(':id')
   @Roles('CONSULTOR')
   async findOne(@Param('id') id: string, @Request() req) {

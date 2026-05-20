@@ -24,6 +24,12 @@ export class SalesController {
     return this.salesService.summaryForDirector();
   }
 
+  @Get('dashboard/director')
+  @Roles('DIRECTOR')
+  async dashboardForDirector() {
+    return this.salesService.dashboardForDirector();
+  }
+
   @Get(':id')
   @Roles('CONSULTOR')
   async findOne(@Param('id') id: string, @Request() req) {

@@ -32,6 +32,9 @@ export class Call {
 
   @Prop({ type: String, enum: CallStatus, default: CallStatus.COMPLETED })
   status: CallStatus;
+
+  @Prop()
+  reminderSentAt?: Date;
 }
 
 export const CallSchema = SchemaFactory.createForClass(Call);

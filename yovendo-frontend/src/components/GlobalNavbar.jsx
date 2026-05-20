@@ -1,9 +1,21 @@
 import React from 'react';
 import { useAuth } from '../context/AuthContext';
+import { useTheme } from '../context/ThemeContext';
 import NotificationsBell from './NotificationsBell';
 
 export default function GlobalNavbar() {
   const { user, logout } = useAuth();
+  const { theme, toggleTheme } = useTheme();
+
+  const ThemeToggle = (
+    <button
+      onClick={toggleTheme}
+      className="p-2 flex items-center justify-center rounded-xl bg-surface-container-high/60 hover:bg-surface-container-high text-on-surface-variant hover:text-primary transition-colors border border-outline-variant/20"
+      title={theme === 'dark' ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro'}
+    >
+      <span className="material-symbols-outlined text-xl">{theme === 'dark' ? 'light_mode' : 'dark_mode'}</span>
+    </button>
+  );
 
   return (
     <header className="bg-surface-container-lowest/90 backdrop-blur-xl sticky top-0 w-full z-40 border-b border-outline-variant/15 flex justify-between items-center px-6 md:px-10 py-3 transition-all duration-300 shadow-sm shadow-black/5 animate-fade-in">
@@ -21,6 +33,7 @@ export default function GlobalNavbar() {
       <div className="flex items-center gap-4 ml-auto">
         {user ? (
           <>
+            {ThemeToggle}
             <NotificationsBell />
             <div className="hidden sm:block text-right mr-2">
               <p className="text-sm font-bold text-on-surface leading-tight">{user.firstName} {user.lastName}</p>
